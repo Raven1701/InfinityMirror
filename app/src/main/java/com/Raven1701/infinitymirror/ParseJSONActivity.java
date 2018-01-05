@@ -250,7 +250,7 @@ public class ParseJSONActivity extends Activity {
         getMenuInflater().inflate(R.menu.gatt_services, menu);
 
 
-        menu.findItem(R.id.menu_json).setVisible(false); //hide own menu
+  /*      menu.findItem(R.id.menu_json).setVisible(false); //hide own menu
 
         if (mConnected) {
             menu.findItem(R.id.menu_connect).setVisible(false);
@@ -258,14 +258,14 @@ public class ParseJSONActivity extends Activity {
         } else {
             menu.findItem(R.id.menu_connect).setVisible(true);
             menu.findItem(R.id.menu_disconnect).setVisible(false);
-        }
+        }*/
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_text:
+         /*   case R.id.menu_text:
                 if (mBluetoothLeService != null) {
                     unbindService(mServiceConnection);
                     mBluetoothLeService = null;
@@ -281,7 +281,7 @@ public class ParseJSONActivity extends Activity {
                 return true;
             case R.id.menu_disconnect:
                 mBluetoothLeService.disconnect();
-                return true;
+                return true;*/
             case android.R.id.home:
                 onBackPressed();
                 return true;

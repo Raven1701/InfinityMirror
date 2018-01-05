@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -38,6 +39,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.raven1701.infinitymirror.R;
+import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,6 +103,14 @@ public class DeviceControlActivity extends Activity {
             mBluetoothLeService = null;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences preferences = this.getSharedPreferences("com.Raven1701.infinitymirror", MODE_PRIVATE);
+        preferences.edit().putString("adress", "empty").apply();
+        preferences.edit().putString("name", "empty").apply();
+        Log.i("SharedPreferenced", "name, adress reset.");
+    }
 
     // Handles various events fired by the Service.
     // ACTION_GATT_CONNECTED: connected to a GATT server.
@@ -242,38 +252,24 @@ public class DeviceControlActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.gatt_services, menu);
+        menu.findItem(R.id.show_logs).setVisible(true); //hide own menu
 
-        menu.findItem(R.id.menu_text).setVisible(false); //hide own menu
-
-        if (mConnected) {
-            menu.findItem(R.id.menu_connect).setVisible(false);
-            menu.findItem(R.id.menu_disconnect).setVisible(true);
-        } else {
-            menu.findItem(R.id.menu_connect).setVisible(true);
-            menu.findItem(R.id.menu_disconnect).setVisible(false);
-        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_json:
-                if (mBluetoothLeService != null) {
-                    unbindService(mServiceConnection);
-                    mBluetoothLeService = null;
+        TextView textView = findViewById(R.id.data_value);
+        switch (item.getItemId()){
+            case R.id.show_logs:
+                if(textView.getVisibility()==View.VISIBLE){
+                    textView.setVisibility(View.INVISIBLE);
+                    item.setTitle(R.string.show_logs);
                 }
-                final Intent intent = new Intent(this, ParseJSONActivity.class);
-                intent.putExtra(ParseJSONActivity.EXTRAS_DEVICE_NAME, mDeviceName);
-                intent.putExtra(ParseJSONActivity.EXTRAS_DEVICE_ADDRESS, mDeviceAddress);
-                startActivity(intent);
-                finish();
-                return true;
-            case R.id.menu_connect:
-                mBluetoothLeService.connect(mDeviceAddress);
-                return true;
-            case R.id.menu_disconnect:
-                mBluetoothLeService.disconnect();
+                else{
+                    textView.setVisibility(View.VISIBLE);
+                    item.setTitle(R.string.hide_logs);
+                }
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -345,11 +341,8 @@ public class DeviceControlActivity extends Activity {
 
     }
     public void clickButton(View v){
-        EditText r = (EditText)findViewById(R.id.editTextR);
-        EditText g = (EditText)findViewById(R.id.editTextG);
-        EditText b = (EditText)findViewById(R.id.editTextB);
-        String message = String.valueOf(r.getText())+","+String.valueOf(g.getText())+","+String.valueOf(b.getText());
-             sendDataToBLE(message);
+             sendDataToBLE("00000025510150050");
+
     }
     void sendDataToBLE(String str) {
         Log.d(TAG, "Sending result=" + str);

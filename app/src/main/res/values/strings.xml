@@ -31,6 +31,8 @@
     <string name="unknown_characteristic">Unknown characteristic</string>
     <string name="unknown_service">Unknown service</string>
 
+    <string name="show_logs">Show Logs</string>
+    <string name="hide_logs">Hide Logs</string>
     <!-- Menu items -->
     <string name="menu_connect">Connect</string>
     <string name="menu_disconnect">Disconnect</string>

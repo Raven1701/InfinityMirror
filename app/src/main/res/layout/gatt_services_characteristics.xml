@@ -18,27 +18,6 @@
     android:layout_margin="10dp"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextB"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal" />
-
-    <EditText
-        android:id="@+id/editTextG"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal" />
-
-    <EditText
-        android:id="@+id/editTextR"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
@@ -183,6 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:visibility="invisible"
                 android:textSize="18sp" />
         </ScrollView>
 
