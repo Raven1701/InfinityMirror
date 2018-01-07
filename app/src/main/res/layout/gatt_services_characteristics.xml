@@ -15,116 +15,277 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="clickButton"
-        android:text="SENDDATA" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_device_address"
-            android:textSize="18sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp">
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/device_address"
+            <TextView
+                android:id="@+id/textShowBrightness"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textBrightnesslabel"
+                android:layout_alignBottom="@+id/textBrightnesslabel"
+                android:layout_alignStart="@+id/textShowMode"
+                android:text="N/A"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textShowDelay"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textTimeDelayLAbel"
+                android:layout_alignBottom="@+id/textTimeDelayLAbel"
+                android:layout_alignStart="@+id/textShowBrightness"
+                android:text="10 [ms]"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textTimeDelayLAbel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/colorPanel"
+                android:layout_alignStart="@+id/textBrightnesslabel"
+                android:layout_marginBottom="8dp"
+                android:text="Delay:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textBrightnesslabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textModeLabel"
+                android:layout_below="@+id/textModeLabel"
+                android:layout_marginTop="15dp"
+                android:text="Brightness:"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/colorPanel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/button_color_panel"
+                android:onClick="colorPanelClick" />
+
+            <TextView
+                android:id="@+id/textModeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="9dp"
+                android:text="Mode:"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textShowMode"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textModeLabel"
+                android:layout_alignBottom="@+id/textModeLabel"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="9dp"
+                android:text="N/A"
+                android:textAlignment="textEnd"
+                android:textSize="18sp" />
+
+            <SeekBar
+                android:id="@+id/seekBarTime"
+                android:layout_width="200dp"
+                android:layout_height="23dp"
+                android:layout_alignTop="@+id/textShowDelay"
+                android:layout_toStartOf="@+id/textShowDelay"
+                android:max="100" />
+
+            <SeekBar
+                android:id="@+id/seekBarBrightness"
+                android:layout_width="200dp"
+                android:layout_height="24dp"
+                android:layout_alignBottom="@+id/textBrightnesslabel"
+                android:layout_toEndOf="@+id/textBrightnesslabel"
+                android:max="100" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:onClick="clickButton"
+                        android:text="Button" />
+
+                    <Button
+                        android:id="@+id/button17"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Button" />
+
+                    <Button
+                        android:id="@+id/button18"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Button" />
+
+                    <Button
+                        android:id="@+id/button19"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Button" />
+
+                    <Button
+                        android:id="@+id/runTimeButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="runTimeChanging"
+                        android:text="RunTimeChanging" />
+
+                    <Button
+                        android:id="@+id/button21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Button" />
+
+                    <Button
+                        android:id="@+id/button22"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Button" />
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/na"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_device_address"
+                android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_state"
-            android:textSize="18sp" />
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/device_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="@string/na"
+                android:textSize="18sp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/connection_state"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/na"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_state"
+                android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/serial_state"
-            android:textSize="18sp" />
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/connection_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="@string/na"
+                android:textSize="18sp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/isSerial"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="@string/na"
-            android:textSize="18sp" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/serial_state"
+                android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
 
+            <TextView
+                android:id="@+id/isSerial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="@string/na"
+                android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_autoscroll"
-            android:textSize="18sp" />
+        </LinearLayout>
 
-        <Space
-            android:layout_width="5dp"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/autoscroll_checkBox"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:button="@null"
-            android:checked="true"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+            android:orientation="horizontal">
 
-    </LinearLayout>
 
-    <!--LinearLayout android:orientation="horizontal"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_autoscroll"
+                android:textSize="18sp" />
+
+            <Space
+                android:layout_width="5dp"
+                android:layout_height="wrap_content" />
+
+            <CheckBox
+                android:id="@+id/autoscroll_checkBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:checked="true"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple" />
+
+        </LinearLayout>
+
+        <!--LinearLayout android:orientation="horizontal"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:layout_margin="10dp">
@@ -146,72 +307,28 @@
 
     </LinearLayout-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ScrollView
-            android:id="@+id/data_scroll"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="false">
+            android:layout_height="100dp"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/data_value"
+            <ScrollView
+                android:id="@+id/data_scroll"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:visibility="invisible"
-                android:textSize="18sp" />
-        </ScrollView>
+                android:layout_height="match_parent"
+                android:fillViewport="false">
+
+                <TextView
+                    android:id="@+id/data_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:visibility="visible" />
+            </ScrollView>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/red_slide"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <SeekBar
-            android:id="@+id/seekRed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="255" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/green_slide"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <SeekBar
-            android:id="@+id/seekGreen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="255" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/blue_slide"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <SeekBar
-            android:id="@+id/seekBlue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="255" />
-
-    </LinearLayout>
 </LinearLayout>

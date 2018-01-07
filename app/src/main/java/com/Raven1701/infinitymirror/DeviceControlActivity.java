@@ -26,20 +26,27 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.SeekBar;
+
 import android.widget.TextView;
 
 import com.example.raven1701.infinitymirror.R;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
+import com.jaredrummler.android.colorpicker.ColorPickerDialog;
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+import com.jaredrummler.android.colorpicker.ColorPickerMyDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,9 +59,9 @@ import java.util.UUID;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity {
+public class DeviceControlActivity extends AppCompatActivity  implements ColorPickerDialogListener {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
-
+    int intColor;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     private int[] RGBFrame = {0, 0, 0};
@@ -63,10 +70,13 @@ public class DeviceControlActivity extends Activity {
     private CheckBox mAutoscrollCheckBox;
     private ScrollView mDataScroll;
     private TextView mDataField;
-
-    private SeekBar mRed, mGreen, mBlue;
     private String mDeviceName;
     private String mDeviceAddress;
+    public String dataColor = "000000000";
+    public String dataBrightness = "50";
+    public String dataDelay = "005";
+    public String dataMode = "100";
+
     //  private ExpandableListView mGattServicesList;
     private BluetoothLeService mBluetoothLeService;
     private boolean mConnected = false;
@@ -192,13 +202,6 @@ public class DeviceControlActivity extends Activity {
         });*/
 
 
-        mRed = (SeekBar) findViewById(R.id.seekRed);
-        mGreen = (SeekBar) findViewById(R.id.seekGreen);
-        mBlue = (SeekBar) findViewById(R.id.seekBlue);
-
-        readSeek(mRed, 0);
-        readSeek(mGreen, 1);
-        readSeek(mBlue, 2);
 
         if (getActionBar() != null) { //if actionbar is there
             getActionBar().setTitle(mDeviceName);
@@ -277,7 +280,32 @@ public class DeviceControlActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+    public void runTimeChanging(View view){
+        ColorPickerDialog.newBuilder()
+                .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
+                .setAllowPresets(false)
+                .setDialogId(1)
+                .setColor(Color.BLACK)
+                .setShowAlphaSlider(false)
+                .show(this);}
+    public void colorPanelClick(View view){
+        ColorPickerMyDialog.newBuilder()
+                .setDialogType(ColorPickerMyDialog.TYPE_CUSTOM)
+                .setAllowPresets(false)
+                .setDialogId(0)
+                .setColor(Color.BLACK)
+                .setShowAlphaSlider(false)
+                .show(this);
 
+        /*Button button = findViewById(R.id.colorPanel);
+        button.setBackgroundColor(intColor);*/
+/*
+        View mView = getLayoutInflater().inflate(R.layout.dialog_colorpicker, null);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();*/
+
+    }
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
@@ -353,6 +381,18 @@ public class DeviceControlActivity extends Activity {
             mBluetoothLeService.setCharacteristicNotification(characteristicRX, true);
         }
     }
+    public void sendDataToBLE() {
+        String str = dataColor+dataMode+dataBrightness+dataDelay;
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        preferences.edit().putString("string", str).apply();
+        Log.d(TAG, "Sending result=" + str);
+        final byte[] tx = str.getBytes();
+        if (mConnected) {
+            characteristicTX.setValue(tx);
+            mBluetoothLeService.writeCharacteristic(characteristicTX);
+            mBluetoothLeService.setCharacteristicNotification(characteristicRX, true);
+        }
+    }
 
     private static IntentFilter makeGattUpdateIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -363,26 +403,6 @@ public class DeviceControlActivity extends Activity {
         return intentFilter;
     }
 
-    private void readSeek(SeekBar seekBar, final int pos) {
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
-                RGBFrame[pos] = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                // TODO Auto-generated method stub
-                makeChange();
-            }
-        });
-    }
 
     // on change of bars write char
     private void makeChange() {
@@ -400,6 +420,34 @@ public class DeviceControlActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("mDataField", mDataField.getText().toString());
+    }
+
+    @Override
+    public void onColorSelected(int dialogId, int color) {
+        Button button = findViewById(R.id.colorPanel);
+        button.setBackgroundColor(color);
+        Log.i("sdasd", "jestem tu");
+        intColor = color;
+        dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+        sendDataToBLE();
+
+    }
+    public String prepareData(String data){
+        switch(data.length()){
+            case 3:
+                return data;
+            case 2:
+                return "0"+data;
+            case 1:
+                return "00"+data;
+
+            default:
+                return "000";
+        }
+    }
+    @Override
+    public void onDialogDismissed(int dialogId) {
+        Log.i("colors: ", dataColor);
     }
 
 }
