@@ -110,8 +110,8 @@
                 android:layout_height="23dp"
                 android:layout_alignTop="@+id/textShowDelay"
                 android:layout_toStartOf="@+id/textShowDelay"
-                android:max="1000"
-                android:min="10"/>
+                android:max="5000"
+                android:min="10" />
 
             <SeekBar
                 android:id="@+id/seekBarBrightness"
@@ -144,33 +144,36 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:onClick="clickButton"
-                        android:text="Button" />
+                        android:onClick="colorWipe"
+                        android:text="color Wipe" />
 
                     <Button
                         android:id="@+id/button17"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Button" />
+                        android:onClick="theaterChase"
+                        android:text="theater Chase" />
 
                     <Button
                         android:id="@+id/button18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Button" />
+                        android:onClick="rainbow"
+                        android:text="rainbow" />
 
                     <Button
                         android:id="@+id/button19"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Button" />
+                        android:onClick="theaterChaseRainbow"
+                        android:text="rainbow theater Chase" />
 
                     <Button
                         android:id="@+id/runTimeButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="runTimeChanging"
-                        android:text="RunTimeChanging" />
+                        android:onClick="rainbowCycle"
+                        android:text="rainbow cycle" />
 
                     <Button
                         android:id="@+id/button21"

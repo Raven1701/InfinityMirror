@@ -182,7 +182,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
 
         mAutoscrollCheckBox = (CheckBox) findViewById(R.id.autoscroll_checkBox);
         mDataScroll = (ScrollView) findViewById(R.id.data_scroll);
-
+        uptadeMode();
 
         mDataField = (TextView) findViewById(R.id.data_value);
 
@@ -263,7 +263,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
             int tempDelay;
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                delay.setText(String.valueOf(i));
+                delay.setText(String.valueOf(i)+"[ms]");
                 tempDelay = i;
             }
 
@@ -531,6 +531,50 @@ public class DeviceControlActivity extends AppCompatActivity  {
                 return "000";
         }
     }
+   public void colorWipe(View v){
+        dataMode = "100";
+        sendDataToBLE();
+    }
+   public void theaterChase(View v){
+        dataMode = "101";
+        sendDataToBLE();
+    }
+   public void rainbow(View v){
+        dataMode = "102";
+        sendDataToBLE();
+    }
+   public void theaterChaseRainbow(View v){
+        dataMode = "103";
+        sendDataToBLE();
+    }
+   public void rainbowCycle(View v){
+        dataMode = "104";
+        sendDataToBLE();
+    }
+    public void uptadeMode(String string){
+        TextView textViewMode = findViewById(R.id.textShowMode);
+        textViewMode.setText(string);
+    }
+    public void uptadeMode(){
+       switch(Integer.valueOf(dataMode)){
+           case 100:
+               uptadeMode("Full Color");
+               break;
+           case 101:
+               uptadeMode("Theater Chase");
+               break;
+           case 102:
+               uptadeMode("Rainbow Cycler");
+               break;
+           case 103:
+               uptadeMode("Theater Chase Rainbow");
+               break;
+           case 104:
+               uptadeMode("Rainbow Color");
+               break;
+           case 105:
 
-
+               break;
+       }
+    }
 }

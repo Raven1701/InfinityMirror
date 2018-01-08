@@ -22,11 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.Raven1701.infinitymirror.MainActivity"/>
         <activity android:name="com.Raven1701.infinitymirror.DeviceControlActivity"
             android:screenOrientation="portrait"
             android:theme="@style/black_style_appCompat"/>
-        <activity android:name="com.Raven1701.infinitymirror.ParseJSONActivity" />
         <service android:name="com.Raven1701.infinitymirror.BluetoothLeService" android:enabled="true"/>
     </application>
 
