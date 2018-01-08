@@ -61,7 +61,7 @@ import java.util.UUID;
  */
 public class DeviceControlActivity extends AppCompatActivity  implements ColorPickerDialogListener {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
-    int intColor;
+    int intColor = Color.WHITE;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     private int[] RGBFrame = {0, 0, 0};
@@ -74,7 +74,7 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
     private String mDeviceAddress;
     public String dataColor = "000000000";
     public String dataBrightness = "50";
-    public String dataDelay = "005";
+    public String dataDelay = "002";
     public String dataMode = "100";
 
     //  private ExpandableListView mGattServicesList;
@@ -280,20 +280,23 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
         }
         return super.onOptionsItemSelected(item);
     }
-    public void runTimeChanging(View view){
-        ColorPickerDialog.newBuilder()
-                .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
+    public void runTimeChanging(View view){}
+
+      /*  ColorPickerDialog.newBuilder()
+        .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
                 .setAllowPresets(false)
                 .setDialogId(1)
                 .setColor(Color.BLACK)
                 .setShowAlphaSlider(false)
                 .show(this);}
+*/
     public void colorPanelClick(View view){
+
         ColorPickerMyDialog.newBuilder()
                 .setDialogType(ColorPickerMyDialog.TYPE_CUSTOM)
                 .setAllowPresets(false)
                 .setDialogId(0)
-                .setColor(Color.BLACK)
+                .setColor(intColor)
                 .setShowAlphaSlider(false)
                 .show(this);
 
@@ -381,10 +384,8 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
             mBluetoothLeService.setCharacteristicNotification(characteristicRX, true);
         }
     }
-    public void sendDataToBLE() {
+    public void sendDataToBLE(){
         String str = dataColor+dataMode+dataBrightness+dataDelay;
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        preferences.edit().putString("string", str).apply();
         Log.d(TAG, "Sending result=" + str);
         final byte[] tx = str.getBytes();
         if (mConnected) {
@@ -426,7 +427,6 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
     public void onColorSelected(int dialogId, int color) {
         Button button = findViewById(R.id.colorPanel);
         button.setBackgroundColor(color);
-        Log.i("sdasd", "jestem tu");
         intColor = color;
         dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
         sendDataToBLE();

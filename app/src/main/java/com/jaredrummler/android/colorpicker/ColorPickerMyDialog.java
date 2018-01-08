@@ -34,6 +34,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -154,6 +155,7 @@ public class ColorPickerMyDialog extends DialogFragment implements OnTouchListen
     }
 
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Log.i("create", "dialog");
         dialogId = getArguments().getInt(ARG_ID);
         showAlphaSlider = getArguments().getBoolean(ARG_ALPHA);
         showColorShades = getArguments().getBoolean(ARG_SHOW_COLOR_SHADES);
@@ -215,7 +217,7 @@ public class ColorPickerMyDialog extends DialogFragment implements OnTouchListen
     @Override public void onStart() {
         super.onStart();
         AlertDialog dialog = (AlertDialog) getDialog();
-
+        Log.i("create", "dialog");
         // http://stackoverflow.com/a/16972670/1048340
         //noinspection ConstantConditions
         dialog.getWindow()
@@ -338,6 +340,7 @@ public class ColorPickerMyDialog extends DialogFragment implements OnTouchListen
         color = newColor;
         newColorPanel.setColor(newColor);
         colorPickerDialogListener.onColorSelected(dialogId, color);
+        Log.i("Im here", "Color is changed;");
         if (!fromEditText) {
             setHex(newColor);
             if (hexEditText.hasFocus()) {
@@ -349,7 +352,6 @@ public class ColorPickerMyDialog extends DialogFragment implements OnTouchListen
         fromEditText = false;
         //todo zrobic w czasie rzeczywistym zmienianie kolorkow :)
     }
-
     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
@@ -542,6 +544,7 @@ public class ColorPickerMyDialog extends DialogFragment implements OnTouchListen
 
             colorPanelView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
+                    Log.i("ColorPickerView", "listener");
                     if (v.getTag() instanceof Boolean && (Boolean) v.getTag()) {
                         colorPickerDialogListener.onColorSelected(dialogId, ColorPickerMyDialog.this.color);
                         dismiss();
