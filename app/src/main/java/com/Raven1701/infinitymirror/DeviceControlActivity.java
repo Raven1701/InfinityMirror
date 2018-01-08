@@ -22,6 +22,7 @@ import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -40,13 +41,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ScrollView;
 
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.raven1701.infinitymirror.R;
-import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
-import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
-import com.jaredrummler.android.colorpicker.ColorPickerMyDialog;
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,9 +61,10 @@ import java.util.UUID;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends AppCompatActivity  implements ColorPickerDialogListener {
+public class DeviceControlActivity extends AppCompatActivity  {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
     int intColor = Color.WHITE;
+    int firstintColor = intColor;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     private int[] RGBFrame = {0, 0, 0};
@@ -225,6 +228,58 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
                 }
             });
         }
+        final TextView brightness = findViewById(R.id.textShowBrightness);
+        SeekBar seekBarBritghness = findViewById(R.id.seekBarBrightness);
+        seekBarBritghness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int tempBrightness;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+                brightness.setText(String.valueOf(progress));
+                tempBrightness = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                String bright = String.valueOf(String.valueOf((int)((tempBrightness-1)/2)));
+                switch(bright.length()){
+                    case 2:
+                        dataBrightness=bright;
+                        break;
+                    case 1:
+                        dataBrightness="0"+bright;
+                }
+                Log.i("Brightness", dataBrightness);
+                sendDataToBLE();
+            }
+        });
+        final TextView delay = findViewById(R.id.textShowDelay);
+        SeekBar seekBarDelay = findViewById(R.id.seekBarTime);
+        seekBarDelay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int tempDelay;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                delay.setText(String.valueOf(i));
+                tempDelay = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                dataDelay = prepareData(String.valueOf((int)(tempDelay/10)));
+                sendDataToBLE();
+                Log.i("Delay:", dataDelay);
+            }
+        });
+
     }
 
     @Override
@@ -291,15 +346,54 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
                 .show(this);}
 */
     public void colorPanelClick(View view){
-
-        ColorPickerMyDialog.newBuilder()
+        ColorPickerDialogBuilder
+                .with(this)
+                .setTitle("Choose color")
+                .initialColor(intColor)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(12)
+                .lightnessSliderOnly()
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
+                    @Override
+                    public void onColorSelected(int color) {
+                        Button button = findViewById(R.id.colorPanel);
+                        button.setBackgroundColor(color);
+                        intColor = color;
+                        dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                        sendDataToBLE();
+                    }
+                })
+                .setPositiveButton("accept", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
+                        Button button = findViewById(R.id.colorPanel);
+                        button.setBackgroundColor(color);
+                        intColor = color;
+                        firstintColor = intColor;
+                        dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                        sendDataToBLE();
+                    }
+                })
+                .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int color = firstintColor;
+                        Button button = findViewById(R.id.colorPanel);
+                        button.setBackgroundColor(color);
+                        dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                        sendDataToBLE();
+                    }
+                })
+                .build()
+                .show();
+   /*     ColorPickerMyDialog.newBuilder()
                 .setDialogType(ColorPickerMyDialog.TYPE_CUSTOM)
                 .setAllowPresets(false)
                 .setDialogId(0)
                 .setColor(intColor)
                 .setShowAlphaSlider(false)
                 .show(this);
-
+*/
         /*Button button = findViewById(R.id.colorPanel);
         button.setBackgroundColor(intColor);*/
 /*
@@ -423,15 +517,7 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
         outState.putString("mDataField", mDataField.getText().toString());
     }
 
-    @Override
-    public void onColorSelected(int dialogId, int color) {
-        Button button = findViewById(R.id.colorPanel);
-        button.setBackgroundColor(color);
-        intColor = color;
-        dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
-        sendDataToBLE();
 
-    }
     public String prepareData(String data){
         switch(data.length()){
             case 3:
@@ -445,9 +531,6 @@ public class DeviceControlActivity extends AppCompatActivity  implements ColorPi
                 return "000";
         }
     }
-    @Override
-    public void onDialogDismissed(int dialogId) {
-        Log.i("colors: ", dataColor);
-    }
+
 
 }

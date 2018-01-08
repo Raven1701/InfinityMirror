@@ -38,12 +38,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.raven1701.infinitymirror.R;
-import com.jaredrummler.android.colorpicker.ColorPanelView;
-import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 
 import java.util.ArrayList;
 
@@ -87,6 +86,7 @@ public class DeviceScanActivity extends ListActivity {
             finish();
             return;
         }
+
     }
 
     @Override

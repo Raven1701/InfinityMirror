@@ -110,7 +110,8 @@
                 android:layout_height="23dp"
                 android:layout_alignTop="@+id/textShowDelay"
                 android:layout_toStartOf="@+id/textShowDelay"
-                android:max="100" />
+                android:max="1000"
+                android:min="10"/>
 
             <SeekBar
                 android:id="@+id/seekBarBrightness"
@@ -118,7 +119,8 @@
                 android:layout_height="24dp"
                 android:layout_alignBottom="@+id/textBrightnesslabel"
                 android:layout_toEndOf="@+id/textBrightnesslabel"
-                android:max="100" />
+                android:max="100"
+                android:min="20"/>
 
         </RelativeLayout>
 
