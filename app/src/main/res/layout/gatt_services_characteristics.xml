@@ -13,9 +13,10 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     android:orientation="vertical">
 
@@ -24,10 +25,62 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp">
+            android:layout_height="195dp">
 
+            <TextView
+                android:id="@+id/textFirstColor2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textModeLabel"
+                android:layout_below="@+id/textModeLabel"
+                android:layout_marginEnd="8dp"
+                android:text="Second Color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/view2"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintStart_toStartOf="@+id/view2" />
+
+            <TextView
+                android:id="@+id/textFirstColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textModeLabel"
+                android:layout_below="@+id/textModeLabel"
+                android:layout_marginEnd="8dp"
+                android:text="First Color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintStart_toStartOf="@+id/view" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/view2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="110dp"
+                android:background="@drawable/color_picker"
+                android:elevation="6.75dp"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="1.9"
+                app:cardCornerRadius="35dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/colorPanel2"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@color/colorAccent"
+                    android:onClick="colorPanelClick2"
+                    android:src="@drawable/color_picker"
+                    tools:layout_editor_absoluteY="135dp" />
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:id="@+id/textShowBrightness"
@@ -38,7 +91,11 @@
                 android:layout_alignStart="@+id/textShowMode"
                 android:text="N/A"
                 android:textAlignment="textEnd"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textShowDelay" />
 
             <TextView
                 android:id="@+id/textShowDelay"
@@ -49,17 +106,19 @@
                 android:layout_alignStart="@+id/textShowBrightness"
                 android:text="10 [ms]"
                 android:textAlignment="textEnd"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textShowMode" />
 
             <TextView
                 android:id="@+id/textTimeDelayLAbel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/colorPanel"
                 android:layout_alignStart="@+id/textBrightnesslabel"
-                android:layout_marginBottom="8dp"
                 android:text="Delay:"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/textModeLabel"
+                app:layout_constraintTop_toTopOf="@+id/seekBarTime" />
 
             <TextView
                 android:id="@+id/textBrightnesslabel"
@@ -67,19 +126,37 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/textModeLabel"
                 android:layout_below="@+id/textModeLabel"
-                android:layout_marginTop="15dp"
                 android:text="Brightness:"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/textTimeDelayLAbel"
+                app:layout_constraintTop_toBottomOf="@+id/textTimeDelayLAbel" />
 
-            <Button
-                android:id="@+id/colorPanel"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/button_color_panel"
-                android:onClick="colorPanelClick" />
+            <android.support.v7.widget.CardView
+                android:id="@+id/view"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+
+                android:layout_marginStart="50dp"
+
+                android:layout_marginTop="110dp"
+                android:elevation="6.75dp"
+                android:innerRadius="0dp"
+                android:shape="ring"
+                android:thicknessRatio="1.9"
+                app:cardCornerRadius="35dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/colorPanel"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@color/colorAccent"
+                    android:onClick="colorPanelClick"
+                    android:src="@drawable/color_picker"
+                    tools:layout_editor_absoluteY="135dp" />
+            </android.support.v7.widget.CardView>
 
             <TextView
                 android:id="@+id/textModeLabel"
@@ -87,10 +164,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="Mode:"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textShowMode"
@@ -99,34 +178,47 @@
                 android:layout_alignBaseline="@+id/textModeLabel"
                 android:layout_alignBottom="@+id/textModeLabel"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="9dp"
+                android:layout_marginTop="8dp"
                 android:text="N/A"
                 android:textAlignment="textEnd"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <SeekBar
                 android:id="@+id/seekBarTime"
                 android:layout_width="200dp"
-                android:layout_height="23dp"
+                android:layout_height="19dp"
                 android:layout_alignTop="@+id/textShowDelay"
                 android:layout_toStartOf="@+id/textShowDelay"
                 android:max="5000"
-                android:min="10" />
+                android:min="10"
+                app:layout_constraintEnd_toEndOf="@+id/seekBarBrightness"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textTimeDelayLAbel"
+                app:layout_constraintTop_toBottomOf="@+id/textShowMode" />
 
             <SeekBar
                 android:id="@+id/seekBarBrightness"
                 android:layout_width="200dp"
                 android:layout_height="24dp"
                 android:layout_alignBottom="@+id/textBrightnesslabel"
+                android:layout_marginStart="8dp"
                 android:layout_toEndOf="@+id/textBrightnesslabel"
                 android:max="100"
-                android:min="20"/>
+                android:min="20"
+                app:layout_constraintEnd_toStartOf="@+id/textShowBrightness"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/textBrightnesslabel"
+                app:layout_constraintTop_toBottomOf="@+id/textShowDelay" />
 
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="198dp"
             android:orientation="vertical">
 
             <ScrollView
@@ -137,6 +229,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="mode105"
+                        android:text="Button" />
 
                     <Button
                         android:id="@+id/button16"
@@ -179,12 +278,14 @@
                         android:id="@+id/button21"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="mdoe106"
                         android:text="Button" />
 
                     <Button
                         android:id="@+id/button22"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="mode107"
                         android:text="Button" />
                 </LinearLayout>
             </ScrollView>

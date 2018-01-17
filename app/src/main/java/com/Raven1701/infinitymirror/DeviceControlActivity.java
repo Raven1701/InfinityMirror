@@ -39,6 +39,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ScrollView;
 
 import android.widget.SeekBar;
@@ -64,6 +65,7 @@ import java.util.UUID;
 public class DeviceControlActivity extends AppCompatActivity  {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
     int intColor = Color.WHITE;
+    int secondintColor = Color.BLACK;
     int firstintColor = intColor;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
@@ -76,6 +78,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
     private String mDeviceName;
     private String mDeviceAddress;
     public String dataColor = "000000000";
+    public String dataColor2 = "000000000";
     public String dataBrightness = "50";
     public String dataDelay = "002";
     public String dataMode = "100";
@@ -242,18 +245,11 @@ public class DeviceControlActivity extends AppCompatActivity  {
             public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                String bright = String.valueOf(String.valueOf((int)((tempBrightness-1)/2)));
-                switch(bright.length()){
-                    case 2:
-                        dataBrightness=bright;
-                        break;
-                    case 1:
-                        dataBrightness="0"+bright;
-                }
+                String bright = String.valueOf(String.valueOf((int)((tempBrightness)*2.55)));
                 Log.i("Brightness", dataBrightness);
+                dataBrightness = prepareData(dataBrightness);
                 sendDataToBLE();
             }
         });
@@ -344,7 +340,49 @@ public class DeviceControlActivity extends AppCompatActivity  {
                 .setColor(Color.BLACK)
                 .setShowAlphaSlider(false)
                 .show(this);}
-*/
+*/    public void colorPanelClick2(View view){
+          ColorPickerDialogBuilder
+                  .with(this)
+                  .setTitle("Choose color")
+                  .initialColor(intColor)
+                  .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                  .density(12)
+                  .lightnessSliderOnly()
+                  .setOnColorSelectedListener(new OnColorSelectedListener() {
+                      @Override
+                      public void onColorSelected(int color) {
+                          ImageButton button = findViewById(R.id.colorPanel2);
+                          button.setBackgroundColor(color);
+                          intColor = color;
+                          dataColor2 = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                          sendDataToBLE();
+                      }
+                  })
+                  .setPositiveButton("accept", new ColorPickerClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
+                          ImageButton button = findViewById(R.id.colorPanel2);
+                          button.setBackgroundColor(color);
+                          intColor = color;
+                          secondintColor = intColor;
+                          dataColor2 = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                          sendDataToBLE();
+                      }
+                  })
+                  .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                          int color = secondintColor;
+                          ImageButton button = findViewById(R.id.colorPanel2);
+                          button.setBackgroundColor(color);
+                          dataColor2 = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                          sendDataToBLE();
+                      }
+                  })
+                  .build()
+                  .show();
+      }
+
     public void colorPanelClick(View view){
         ColorPickerDialogBuilder
                 .with(this)
@@ -356,7 +394,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
                 .setOnColorSelectedListener(new OnColorSelectedListener() {
                     @Override
                     public void onColorSelected(int color) {
-                        Button button = findViewById(R.id.colorPanel);
+                        ImageButton button = findViewById(R.id.colorPanel);
                         button.setBackgroundColor(color);
                         intColor = color;
                         dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
@@ -366,7 +404,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
                 .setPositiveButton("accept", new ColorPickerClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
-                        Button button = findViewById(R.id.colorPanel);
+                        ImageButton button = findViewById(R.id.colorPanel);
                         button.setBackgroundColor(color);
                         intColor = color;
                         firstintColor = intColor;
@@ -378,7 +416,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int color = firstintColor;
-                        Button button = findViewById(R.id.colorPanel);
+                        ImageButton button = findViewById(R.id.colorPanel);
                         button.setBackgroundColor(color);
                         dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
                         sendDataToBLE();
@@ -386,23 +424,8 @@ public class DeviceControlActivity extends AppCompatActivity  {
                 })
                 .build()
                 .show();
-   /*     ColorPickerMyDialog.newBuilder()
-                .setDialogType(ColorPickerMyDialog.TYPE_CUSTOM)
-                .setAllowPresets(false)
-                .setDialogId(0)
-                .setColor(intColor)
-                .setShowAlphaSlider(false)
-                .show(this);
-*/
-        /*Button button = findViewById(R.id.colorPanel);
-        button.setBackgroundColor(intColor);*/
-/*
-        View mView = getLayoutInflater().inflate(R.layout.dialog_colorpicker, null);
-        mBuilder.setView(mView);
-        final AlertDialog dialog = mBuilder.create();
-        dialog.show();*/
-
     }
+
     private void updateConnectionState(final int resourceId) {
         runOnUiThread(new Runnable() {
             @Override
@@ -479,7 +502,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
         }
     }
     public void sendDataToBLE(){
-        String str = dataColor+dataMode+dataBrightness+dataDelay;
+        String str = dataColor+dataMode+dataBrightness+dataDelay+dataColor2;
         Log.d(TAG, "Sending result=" + str);
         final byte[] tx = str.getBytes();
         if (mConnected) {
@@ -549,6 +572,18 @@ public class DeviceControlActivity extends AppCompatActivity  {
     }
    public void rainbowCycle(View v){
         dataMode = "104";
+        sendDataToBLE();
+    }
+    public void mode105(View v){
+        dataMode = "105";
+        sendDataToBLE();
+    }
+    public void mdoe106(View v){
+        dataMode = "106";
+        sendDataToBLE();
+    }
+    public void mode107(View v){
+        dataMode = "107";
         sendDataToBLE();
     }
     public void uptadeMode(String string){
