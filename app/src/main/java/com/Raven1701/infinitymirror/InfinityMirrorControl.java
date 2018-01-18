@@ -174,12 +174,19 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
         items.add(new Item(T,F,F,T, 102, "Rainbow Cycle"));
         items.add(new Item(T,F,F,T, 103, "Rainbow Theater Chase"));
         items.add(new Item(F,F,F,T, 104, "Rainbow"));
-        items.add(new Item(T,T,F,T,105,"Color Blink"));
+        items.add(new Item(T,T,F,T, 105,"Color Blink"));
         items.add(new Item(F,F,F,F, 106, "Random Color"));
         items.add(new Item(T,T,T,T, 107, "Comet between Colors"));
         items.add(new Item(T,T,T,T, 108, "Double Comet between Colors"));
-        items.add(new Item(T, T,T,T,109, "changing colors"));
-        items.add(new Item(T,T,T,T, 110, "changing rarndom colors"));
+        items.add(new Item(T,T,T,T,109, "Changing Colors"));
+        items.add(new Item(T,T,T,T, 110, "Changing Random Colors"));
+        items.add(new Item(T,F,F,T, 111, "Blink random Colors"));
+        items.add(new Item(F,F,F,T, 112, "All Modes in Cycle"));
+        items.add(new Item(T,T,F,T, 113, "Snake"));
+        items.add(new Item(T,T,T,T, 114, "White Color"));
+        items.add(new Item(T,T,T,T, 115, "Reset"));
+        items.add(new Item(F,F,F,F, 116, "Turn Off"));
+
         items.add(new Item(T,T,T,T, (int)((Math.random()*20)+1), "Random Mode"));
 
     }

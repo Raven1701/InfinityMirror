@@ -53,7 +53,7 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
         TextView textView;
         ViewHolder(View itemView) {
             super(itemView);
-             colorPaleteIco = itemView.findViewById(R.id.brigthness);
+             colorPaleteIco = itemView.findViewById(R.id.color);
              colorPalete2Ico = itemView.findViewById(R.id.color2);
              timeIco = itemView.findViewById(R.id.delay);
              brigthnessIco = itemView.findViewById(R.id.brigthness);
