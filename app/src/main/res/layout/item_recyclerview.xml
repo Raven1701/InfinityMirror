@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:alpha="0.75"
+    android:layout_marginBottom="30dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="30dp">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="100dp"
+        android:layout_height="110dp"
         android:alpha="0.75">
-
-        <ImageView
-            android:id="@+id/color2view"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginBottom="20dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/brightnessview"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/color" />
 
         <TextView
             android:id="@+id/textViewMode"
-            android:layout_width="73dp"
-            android:layout_height="41dp"
+            android:layout_width="86dp"
+            android:layout_height="51dp"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:text=" adfads fsadfa dsfdas dsf"
-            android:textSize="12sp"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -39,40 +30,52 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <ImageView
-            android:id="@+id/timeview"
+            android:id="@+id/color2"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="24dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/colorview"
+            app:layout_constraintEnd_toStartOf="@+id/color"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/brightnessview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/color" />
+
+        <ImageView
+            android:id="@+id/delay"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="24dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/brigthness"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/color"
             app:srcCompat="@drawable/time" />
 
         <ImageView
-            android:id="@+id/colorview"
+            android:id="@+id/brigthness"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="24dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/timeview"
-            app:srcCompat="@drawable/color" />
+            app:layout_constraintStart_toEndOf="@+id/delay"
+            app:srcCompat="@drawable/brightness" />
 
         <ImageView
-            android:id="@+id/brightnessview"
+            android:id="@+id/color"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="24dp"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/timeview"
+            app:layout_constraintEnd_toStartOf="@+id/delay"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/color2view"
-            app:srcCompat="@drawable/brightness" />
+            app:layout_constraintStart_toEndOf="@+id/color2"
+            app:srcCompat="@drawable/color" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

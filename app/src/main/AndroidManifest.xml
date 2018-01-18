@@ -15,16 +15,16 @@
 
         android:name="com.Raven1701.infinitymirror.GlobalData"
         android:theme="@style/black_style">
-        <activity android:name="com.Raven1701.infinitymirror.DeviceScanActivity"
+        <activity android:name="com.Raven1701.infinitymirror.ScanDevice"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.Raven1701.infinitymirror.DeviceControlActivity"
+        <activity android:name="com.Raven1701.infinitymirror.InfinityMirrorControl"
             android:screenOrientation="portrait"
-            android:theme="@style/black_style_appCompat"/>
+            android:theme="@style/AppCompatCustom"/>
         <service android:name="com.Raven1701.infinitymirror.BluetoothLeService" android:enabled="true"/>
     </application>
 

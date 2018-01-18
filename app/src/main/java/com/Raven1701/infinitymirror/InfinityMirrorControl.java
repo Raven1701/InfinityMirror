@@ -16,7 +16,7 @@
 
 package com.Raven1701.infinitymirror;
 
-import android.app.Activity;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.BroadcastReceiver;
@@ -30,20 +30,23 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AlertDialog;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.raven1701.infinitymirror.R;
 import com.flask.colorpicker.ColorPickerView;
@@ -62,32 +65,31 @@ import java.util.UUID;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends AppCompatActivity  {
-    private final static String TAG = DeviceControlActivity.class.getSimpleName();
+public class InfinityMirrorControl extends AppCompatActivity implements recyclerViewAdapter.ItemClickListener  {
+    private final static String TAG = InfinityMirrorControl.class.getSimpleName();
     int intColor = Color.WHITE;
     int secondintColor = Color.BLACK;
     int firstintColor = intColor;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     private int[] RGBFrame = {0, 0, 0};
-    private TextView isSerial;
     private TextView mConnectionState;
     private CheckBox mAutoscrollCheckBox;
     private ScrollView mDataScroll;
     private TextView mDataField;
     private String mDeviceName;
+    ArrayList<Item> items;
     private String mDeviceAddress;
     public String dataColor = "000000000";
     public String dataColor2 = "000000000";
     public String dataBrightness = "50";
     public String dataDelay = "002";
     public String dataMode = "100";
-
+    public recyclerViewAdapter myRecyclerViewAdapter;
     //  private ExpandableListView mGattServicesList;
     private BluetoothLeService mBluetoothLeService;
     private boolean mConnected = false;
 
-    private boolean mSerialSupported = false;
 
     private BluetoothGattCharacteristic characteristicTX;
     private BluetoothGattCharacteristic characteristicRX;
@@ -152,10 +154,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
-                if (mSerialSupported) {
-                    Log.d(TAG, "SET RX MODE");
-                    mBluetoothLeService.setCharacteristicNotification(characteristicRX, true); //automatic set to RX mode
-                }
+
 
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 displayData(intent.getStringExtra(mBluetoothLeService.EXTRA_DATA));
@@ -167,22 +166,48 @@ public class DeviceControlActivity extends AppCompatActivity  {
         // mDataField.setText(R.string.no_data);
         mDataField.setText("");
     }
+    private void createItems(){
+        Boolean T = true;
+        Boolean F = false;
+        items.add(new Item(F,T,F,T, 100, "Full Color"));
+        items.add(new Item(T,T,F,T, 101, "Theater Chase"));
+        items.add(new Item(T,F,F,T, 102, "Rainbow Cycle"));
+        items.add(new Item(T,F,F,T, 103, "Rainbow Theater Chase"));
+        items.add(new Item(F,F,F,T, 104, "Rainbow"));
+        items.add(new Item(T,T,F,T,105,"Color Blink"));
+        items.add(new Item(F,F,F,F, 106, "Random Color"));
+        items.add(new Item(T,T,T,T, 107, "Comet between Colors"));
+        items.add(new Item(T,T,T,T, 108, "Double Comet between Colors"));
+        items.add(new Item(T, T,T,T,109, "changing colors"));
+        items.add(new Item(T,T,T,T, 110, "changing rarndom colors"));
+        items.add(new Item(T,T,T,T, (int)((Math.random()*20)+1), "Random Mode"));
 
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gatt_services_characteristics);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+
+        items = new ArrayList<>();
+        createItems();
+        myRecyclerViewAdapter = new recyclerViewAdapter(this, items);
+        myRecyclerViewAdapter.setClickListener(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(myRecyclerViewAdapter);
+
+
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
         mDeviceAddress = intent.getStringExtra(EXTRAS_DEVICE_ADDRESS);
 
         // Sets up UI references.
-        ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
+
+       // ((TextView) findViewById(R.id.device_address)).setText(mDeviceAddress);
         mConnectionState = (TextView) findViewById(R.id.connection_state);
         // is serial present?
-        isSerial = (TextView) findViewById(R.id.isSerial);
-
         mAutoscrollCheckBox = (CheckBox) findViewById(R.id.autoscroll_checkBox);
         mDataScroll = (ScrollView) findViewById(R.id.data_scroll);
         uptadeMode();
@@ -313,15 +338,15 @@ public class DeviceControlActivity extends AppCompatActivity  {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        TextView textView = findViewById(R.id.data_value);
+        ConstraintLayout logs = findViewById(R.id.logsLayout);
         switch (item.getItemId()){
             case R.id.show_logs:
-                if(textView.getVisibility()==View.VISIBLE){
-                    textView.setVisibility(View.INVISIBLE);
+                if(logs.getVisibility()==View.VISIBLE){
+                    logs.setVisibility(View.GONE);
                     item.setTitle(R.string.show_logs);
                 }
                 else{
-                    textView.setVisibility(View.VISIBLE);
+                    logs.setVisibility(View.VISIBLE);
                     item.setTitle(R.string.hide_logs);
                 }
                 return true;
@@ -331,16 +356,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void runTimeChanging(View view){}
-
-      /*  ColorPickerDialog.newBuilder()
-        .setDialogType(ColorPickerDialog.TYPE_CUSTOM)
-                .setAllowPresets(false)
-                .setDialogId(1)
-                .setColor(Color.BLACK)
-                .setShowAlphaSlider(false)
-                .show(this);}
-*/    public void colorPanelClick2(View view){
+  public void colorPanelClick2(View view){
           ColorPickerDialogBuilder
                   .with(this)
                   .setTitle("Choose color")
@@ -430,7 +446,7 @@ public class DeviceControlActivity extends AppCompatActivity  {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mConnectionState.setText(resourceId);
+                mConnectionState.setText(getResources().getString(resourceId));
             }
         });
     }
@@ -472,13 +488,6 @@ public class DeviceControlActivity extends AppCompatActivity  {
                     LIST_NAME, SampleGattAttributes.lookup(uuid, unknownServiceString));
 
             // If the service exists for HM 10 Serial, say so.
-            if (SampleGattAttributes.lookup(uuid, unknownServiceString) == "HM 10 Serial") {
-                isSerial.setText("Yes");
-                mSerialSupported = true;
-            } else {
-                isSerial.setText("No");
-                mSerialSupported = false;
-            }
             currentServiceData.put(LIST_UUID, uuid);
             gattServiceData.add(currentServiceData);
 
@@ -611,5 +620,12 @@ public class DeviceControlActivity extends AppCompatActivity  {
 
                break;
        }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Log.i("mode: ", String.valueOf(items.get(position).mode));
+        dataMode = String.valueOf(items.get(position).mode);
+        sendDataToBLE();
     }
 }
