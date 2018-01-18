@@ -14,33 +14,3 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-I get background image from: http://lightenergystudio.com/infinitymain.html
