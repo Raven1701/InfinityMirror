@@ -4,7 +4,7 @@
 #include <Adafruit_NeoPixel.h>
 
 #define PIN 12
-#define NUM_LEDS 55
+#define NUM_LEDS 58
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
 
 String MESSAGE = "";
