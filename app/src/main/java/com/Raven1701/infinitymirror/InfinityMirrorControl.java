@@ -82,9 +82,10 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
     private String mDeviceAddress;
     public String dataColor = "000000000";
     public String dataColor2 = "000000000";
-    public String dataBrightness = "50";
+    public String dataBrightness = "150";
     public String dataDelay = "002";
     public String dataMode = "100";
+    public String whichColor ="1";
     public recyclerViewAdapter myRecyclerViewAdapter;
     //  private ExpandableListView mGattServicesList;
     private BluetoothLeService mBluetoothLeService;
@@ -173,21 +174,15 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
         items.add(new Item(T,T,F,T, 101, "Theater Chase"));
         items.add(new Item(T,F,F,T, 102, "Rainbow Cycle"));
         items.add(new Item(T,F,F,T, 103, "Rainbow Theater Chase"));
-        items.add(new Item(F,F,F,T, 104, "Rainbow"));
+        items.add(new Item(T,T,T,T, 104, "Snake"));
         items.add(new Item(T,T,F,T, 105,"Color Blink"));
         items.add(new Item(F,F,F,F, 106, "Random Color"));
         items.add(new Item(T,T,T,T, 107, "Comet between Colors"));
         items.add(new Item(T,T,T,T, 108, "Double Comet between Colors"));
         items.add(new Item(T,T,T,T,109, "Changing Colors"));
-        items.add(new Item(T,T,T,T, 110, "Changing Random Colors"));
-        items.add(new Item(T,F,F,T, 111, "Blink random Colors"));
-        items.add(new Item(F,F,F,T, 112, "All Modes in Cycle"));
-        items.add(new Item(T,T,F,T, 113, "Snake"));
-        items.add(new Item(T,T,T,T, 114, "White Color"));
-        items.add(new Item(T,T,T,T, 115, "Reset"));
-        items.add(new Item(F,F,F,F, 116, "Turn Off"));
+        items.add(new Item(T,F,F,T, 110, "Changing Random Colors"));
 
-        items.add(new Item(T,T,T,T, (int)((Math.random()*20)+1), "Random Mode"));
+
 
     }
     @Override
@@ -203,8 +198,6 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(myRecyclerViewAdapter);
-
-
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -281,7 +274,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
             public void onStopTrackingTouch(SeekBar seekBar) {
                 String bright = String.valueOf(String.valueOf((int)((tempBrightness)*2.55)));
                 Log.i("Brightness", dataBrightness);
-                dataBrightness = prepareData(dataBrightness);
+                dataBrightness = prepareData(bright);
                 sendDataToBLE();
             }
         });
@@ -378,6 +371,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
                           button.setBackgroundColor(color);
                           intColor = color;
                           dataColor2 = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                          whichColor = "2";
                           sendDataToBLE();
                       }
                   })
@@ -389,6 +383,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
                           intColor = color;
                           secondintColor = intColor;
                           dataColor2 = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                          whichColor = "2";
                           sendDataToBLE();
                       }
                   })
@@ -399,6 +394,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
                           ImageButton button = findViewById(R.id.colorPanel2);
                           button.setBackgroundColor(color);
                           dataColor2 = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                          whichColor = "2";
                           sendDataToBLE();
                       }
                   })
@@ -421,6 +417,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
                         button.setBackgroundColor(color);
                         intColor = color;
                         dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                        whichColor = "1";
                         sendDataToBLE();
                     }
                 })
@@ -432,6 +429,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
                         intColor = color;
                         firstintColor = intColor;
                         dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                        whichColor = "1";
                         sendDataToBLE();
                     }
                 })
@@ -442,6 +440,7 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
                         ImageButton button = findViewById(R.id.colorPanel);
                         button.setBackgroundColor(color);
                         dataColor = prepareData(String.valueOf(Color.red(color)))+prepareData(String.valueOf(Color.green(color)))+prepareData(String.valueOf(Color.blue(color)));
+                        whichColor = "1";
                         sendDataToBLE();
                     }
                 })
@@ -518,7 +517,20 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
         }
     }
     public void sendDataToBLE(){
-        String str = dataColor+dataMode+dataBrightness+dataDelay+dataColor2;
+        String str= "";
+        if(whichColor.equals("1")) str = dataColor+dataMode+dataBrightness+dataDelay+whichColor;
+        else str = dataColor2+dataMode+dataBrightness+dataDelay+whichColor;
+        Log.d(TAG, "Sending result=" + str);
+        final byte[] tx = str.getBytes();
+        if (mConnected) {
+            characteristicTX.setValue(tx);
+            mBluetoothLeService.writeCharacteristic(characteristicTX);
+            mBluetoothLeService.setCharacteristicNotification(characteristicRX, true);
+        }
+    }
+    public void reset(View v){
+        String str;
+        str = "0000000001001000021";
         Log.d(TAG, "Sending result=" + str);
         final byte[] tx = str.getBytes();
         if (mConnected) {
@@ -569,38 +581,6 @@ public class InfinityMirrorControl extends AppCompatActivity implements recycler
             default:
                 return "000";
         }
-    }
-   public void colorWipe(View v){
-        dataMode = "100";
-        sendDataToBLE();
-    }
-   public void theaterChase(View v){
-        dataMode = "101";
-        sendDataToBLE();
-    }
-   public void rainbow(View v){
-        dataMode = "102";
-        sendDataToBLE();
-    }
-   public void theaterChaseRainbow(View v){
-        dataMode = "103";
-        sendDataToBLE();
-    }
-   public void rainbowCycle(View v){
-        dataMode = "104";
-        sendDataToBLE();
-    }
-    public void mode105(View v){
-        dataMode = "105";
-        sendDataToBLE();
-    }
-    public void mdoe106(View v){
-        dataMode = "106";
-        sendDataToBLE();
-    }
-    public void mode107(View v){
-        dataMode = "107";
-        sendDataToBLE();
     }
     public void uptadeMode(String string){
         TextView textViewMode = findViewById(R.id.textShowMode);
