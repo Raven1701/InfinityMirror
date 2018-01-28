@@ -16,6 +16,7 @@
 
 package com.Raven1701.infinitymirror;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
@@ -27,6 +28,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v13.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +52,7 @@ public class ScanDevice extends ListActivity {
     private boolean mScanning;
     private Handler mHandler;
     String macAdress= "empty";
+    static public final int REQUEST_LOCATION = 1;
 
     SharedPreferences preferences;
     String nameDevice = "";
@@ -126,6 +129,14 @@ public class ScanDevice extends ListActivity {
                 startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Check Permissions Now
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION);
+        } else {
+        }
    /*     if(!macAdress.equals(preferences.getString("adress", "empty"))){
             macAdress = (preferences.getString("adress", "empty"));
             nameDevice = (preferences.getString("name", "empty"));
@@ -146,7 +157,19 @@ public class ScanDevice extends ListActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION) {
+            if(grantResults.length == 1
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+            } else {
+                // Permission was denied or request was cancelled
+            }
+        }
+    }
     @Override
     protected void onPause() {
         super.onPause();
